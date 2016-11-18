@@ -9,7 +9,30 @@ angular.module('itunes').service('itunesService', function($http, $q){
 
     //Code here
     
-
+this.getSongData = function(searchTerm) {
+  var songData = $q.defer();
+  $http({
+    method: 'JSONP',
+    url: 'https://itunes.apple.com/search?term=' + searchTerm + '&callback=JSON_CALLBACK'
+  }).then(function(result) {
+    var results = result.data.results;
+    // var parsedResults = results.map(function(item) {
+    //   var parsedItem = {
+    //     AlbumArt: item.artworkUrl60,
+    //     Artist: item.artistName,
+    //     Collection: item.collectionName,
+    //     CollectionPrice: item.collectionPrice,
+    //     Play: item.previewUrl,
+    //     Type: item.kind,
+    //     trackName: item.trackName,
+    //   };
+    //   return parsedItem;
+    // });
+    console.dir(results);
+    songData.resolve(results);
+  });
+  return songData.promise;
+};
 
 
 
